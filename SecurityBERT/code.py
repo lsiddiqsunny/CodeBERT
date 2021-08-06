@@ -142,7 +142,7 @@ class SentimentalLSTM(nn.Module):
         self.output_size=output_size
         self.n_layers=n_layers
         self.hidden_dim=hidden_dim
-        
+        self.model = AutoModel.from_pretrained("microsoft/codebert-base")
         #Embedding and LSTM layers
         self.embedding=nn.Embedding(vocab_size, embedding_dim)
         self.lstm=nn.LSTM(embedding_dim, hidden_dim, n_layers, dropout=drop_prob, batch_first=True)
@@ -163,7 +163,7 @@ class SentimentalLSTM(nn.Module):
         batch_size=x.size()
         
         #Embadding and LSTM output
-        embedd=self.embedding(x)
+        embedd=self.model(x)[0]
         lstm_out, hidden=self.lstm(embedd, hidden)
         
         #stack up the lstm output
@@ -201,7 +201,7 @@ class SentimentalLSTM(nn.Module):
 
 # %%
 output_size = 1
-embedding_dim = 512
+embedding_dim = 768
 hidden_dim = 256
 n_layers = 2
 
